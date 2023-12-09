@@ -1,5 +1,5 @@
 namespace code;
-public class Processor1
+public class Processor2
 {
     public static long Process(string[] inputRows)
     {
@@ -13,23 +13,22 @@ public class Processor1
             long[] tempSequence = section;
 
             // dynamic programming
-            List<long> tempTailList = [];
+            List<long> tempHeadList = [];
             // when all of the numbers in tempSequence are 0, stop the while loop
             while (!tempSequence.All(x => x == 0))
             {
                 //get the next level of sequence numbers
-                tempSequence = GetNextSequence(tempSequence, tempTailList);
+                tempSequence = GetNextSequence(tempSequence, tempHeadList);
 
             }
-
             // get the sum of the tail list
-            sum = sum + tempTailList.Sum();
+            sum = sum + GetPreNumber(tempHeadList);
         }
         return sum;
     }
-    public static long[] GetNextSequence(long[] sequence, List<long> tempTailList)
+    public static long[] GetNextSequence(long[] sequence, List<long> tempHeadList)
     {
-        tempTailList.Add(sequence[sequence.Length - 1]);
+        tempHeadList.Add(sequence[0]);
 
         long[] nextSequence = new long[sequence.Length - 1];
         for (int i = 0; i < sequence.Length - 1; i++)
@@ -37,6 +36,15 @@ public class Processor1
             nextSequence[i] = sequence[i + 1] - sequence[i];
         }
         return nextSequence;
+    }
+    public static long GetPreNumber(List<long> tempHeadList)
+    {
+        long preNumber = 0;
+        for (int i = tempHeadList.Count - 1; i >= 0; i--)
+        {
+            preNumber = tempHeadList[i]-preNumber;
+        }
+        return preNumber;
     }
 
 }
